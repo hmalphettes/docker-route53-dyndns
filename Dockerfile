@@ -1,3 +1,8 @@
+## DynDNS for Docker with Route53
+##
+## Dynamic DNS counterpart of James Wilder's nginx-proxy for docker:
+## [jwilder/nginx-proxy](https://github.com/jwilder/nginx-proxy).
+##
 ## Containerize cli53
 ## Discover the expected DNS names following the same conventions than jwilder/nginx-proxy
 ## Generate the DNS A record file and call cli53 to process it

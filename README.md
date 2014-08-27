@@ -1,11 +1,11 @@
 DynDNS for Docker with Route53
 ==============================
 
-This is the Dynamic DNS counterpart of James Wilder's nginx-proxy for docker: https://github.com/jwilder/nginx-proxy.
+This is the Dynamic DNS counterpart of James Wilder's nginx-proxy for docker: [jwilder/nginx-proxy](https://github.com/jwilder/nginx-proxy).
 
-Listen to start events of containers on the docker socket.
-Generates the list of expected A Records according to the VIRTUAL_HOST environment variables in each of the containers as a file.
-Create or update the list of A Records with Route53.
+* Listen to start events of containers on the docker socket.
+* Outputs a shell script with the list of expected A Records according to the VIRTUAL_HOST environment variables of the started containers.
+* Execute the script to create or update the list of A Records with Route53.
 
 The current template does not generate hosted zones.
 
@@ -21,8 +21,10 @@ Environment variables:
 * `AWS_SECRET_ACCESS_KEY` Required
 * `PUBLIC_IP` The IP of the generated records. Optional
 * `PRIVATE_TOP_ZONES` Space separated list of private top-zone and hostnames, optional.
+* `DRY_ROUTE53` when defined, just echo the commands that we would run.
 
 When `PUBLIC_IP` is not defined, call AWS's EC2 metadataservice to get it.
+
 When `PRIVATE_TOP_ZONES` is not defined its default value is: `localhost local priv private`
 
 Example run
@@ -44,9 +46,10 @@ nginx:
   volumes:
     - /var/run/docker.sock:/tmp/docker.sock
 route53:
-  image: hmalphettes/dyndns-route53
-  ports:
-    - "80:80"
+  image: hmalphettes/docker-route53-dyndns
+  environment:
+  	- AWS_ACCESS_KEY_ID: ABC
+  	- AWS_SECRET_ACCESS_KEY: DEF
   volumes:
     - /var/run/docker.sock:/tmp/docker.sock
 web00:
@@ -60,7 +63,7 @@ Example generated script:
 ```
 #!/bin/sh
 [ -z "$PUBLIC_IP" ] && PUBLIC_IP=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
-[ -z "$PRIVATE_TOP_ZONES" ] && PRIVATE_TOP_ZONES="xxx local priv private"
+[ -z "$PRIVATE_TOP_ZONES" ] && PRIVATE_TOP_ZONES="localhost local priv private"
 
 host=dev01.foo.bar
 topzone=$(echo "${host##*.}")
@@ -95,3 +98,6 @@ Minimum IAM policy:
   "Resource": "*"
 }
 ```
+
+COPYRIGHT: Sutoiku Inc 2014
+LICENSE: MIT
