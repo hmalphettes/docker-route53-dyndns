@@ -9,8 +9,8 @@ This is the Dynamic DNS counterpart of James Wilder's nginx-proxy for docker: [j
 
 The current template does not generate hosted zones.
 
-https://github.com/jwilder/docker-gen is in charge of listening to the docker events and generating the file.
-https://github.com/barnybug/cli53 is in charge of talking to Route53.
+[jwilder/docker-gen](https://github.com/jwilder/docker-gen) is in charge of listening to the docker events and generating the file.
+[barnybug/cli53](https://github.com/barnybug/cli53) is in charge of talking to Route53.
 
 Setup
 =====
@@ -99,5 +99,12 @@ Minimum IAM policy:
 }
 ```
 
-COPYRIGHT: Sutoiku Inc 2014
-LICENSE: MIT
+COPYRIGHT:
+----------
+Sutoiku Inc 2014
+
+LICENSE:
+--------
+MIT
+
+Contributions: welcome!
