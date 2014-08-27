@@ -9,7 +9,7 @@ tenant=$(echo $host | cut -f1 -d'.')
 zone=$(echo "${host#*.}")
 if [ "${PRIVATE_TOP_ZONES#*$topzone}" != "$PRIVATE_TOP_ZONES" -o "$tenant" = "$zone" ]; then
 	echo "Skipping private hostname $host"
-elif
+else
 	tenant=$(echo $host | cut -f1 -d'.')
 	zone=$(echo "${host#*.}")
 	cmd="cli53 rrcreate $zone $tenant A $PUBLIC_IP --ttl 300 --replace"
