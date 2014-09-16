@@ -24,8 +24,10 @@ Environment variables:
 * `DRY_ROUTE53` when defined, just echo the commands that we would run.
 
 When `PUBLIC_IP` is not defined, call AWS's EC2 metadataservice to get it.
+When AWS EC2 metadata service is not present; call icanhazip.com.
 
 When `PRIVATE_TOP_ZONES` is not defined its default value is: `localhost local priv private`
+When the VIRTUAL_HOST matches such a domain or hostname it is not published on route53.
 
 Example run
 ===========
