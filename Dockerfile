@@ -23,6 +23,6 @@ RUN \
 
 ADD cli53routes.tmpl /app/cli53routes.tmpl
 
-ENV DOCKER_HOST unix:///tmp/docker.sock
+ENV DOCKER_HOST unix:///var/run/docker.sock
 
 CMD /usr/local/bin/docker-gen -only-published -watch -notify "/bin/sh /tmp/cli53routes" /app/cli53routes.tmpl /tmp/cli53routes
