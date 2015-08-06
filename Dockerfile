@@ -15,7 +15,7 @@ RUN pip install cli53
 RUN mkdir /app
 WORKDIR /app
 
-RUN wget https://stoic-public.s3.amazonaws.com/docker-gen-linux-amd64-0.4.0.tar.gz && \
+RUN curl -L https://github.com/jwilder/docker-gen/releases/download/0.4.0/docker-gen-linux-amd64-0.4.0.tar.gz && \
 	tar xvzf docker-gen-linux-amd64-0.4.0.tar.gz -C /usr/local/bin && \
 	rm docker-gen-linux-amd64-0.4.0.tar.gz
 
