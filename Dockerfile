@@ -7,7 +7,7 @@
 ## Discover the expected DNS names following the same conventions than jwilder/nginx-proxy
 ## Generate the DNS A record file and call cli53 to process it
 
-FROM dockerfile/python
+FROM python:2-slim
 MAINTAINER hugues@sutoiku.com
 
 RUN pip install cli53
