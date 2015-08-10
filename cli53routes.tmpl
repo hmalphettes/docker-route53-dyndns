@@ -9,7 +9,7 @@ topzone=$(echo "${host##*.}")
 tenant=$(echo $host | cut -f1 -d'.')
 zone=$(echo "${host#*.}")
 if [ "${PRIVATE_TOP_ZONES#*$topzone}" != "$PRIVATE_TOP_ZONES" -o "$tenant" = "$zone" ]; then
-	echo "Skipping private hostname $host"
+	echo "Skipping private hostname $host" >> /var/log/route53-dyndns.log
 else
 	tenant=$(echo $host | cut -f1 -d'.')
 	zone=$(echo "${host#*.}")
