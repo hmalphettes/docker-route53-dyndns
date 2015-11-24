@@ -11,10 +11,10 @@ FROM alpine
 MAINTAINER hugues@sutoiku.com
 
 WORKDIR /app
-RUN apk add --update py-pip wget curl && \
-	pip install cli53 && \
-	wget -P /usr/local/bin https://github.com/hmalphettes/nginx-proxy/releases/download/0.0.0/docker-gen && \
-	chmod +x /usr/local/bin/docker-gen
+RUN apk add --update py-pip curl bash && \
+	pip install cli53 && cd /usr/local/bin \
+	curl -LO https://github.com/hmalphettes/nginx-proxy/releases/download/0.0.0/docker-gen && \
+	chmod +x docker-gen
 
 ADD cli53routes.tmpl /app/cli53routes.tmpl
 
