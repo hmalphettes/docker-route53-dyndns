@@ -11,7 +11,7 @@ FROM alpine
 MAINTAINER hugues@sutoiku.com
 
 WORKDIR /app
-RUN apk add --update python-dev wget curl && \
+RUN apk add --update py-pip wget curl && \
 	pip install cli53 && \
 	wget -P /usr/local/bin https://github.com/hmalphettes/nginx-proxy/releases/download/0.0.0/docker-gen && \
 	chmod +x /usr/local/bin/docker-gen
