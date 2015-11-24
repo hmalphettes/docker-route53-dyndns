@@ -12,7 +12,7 @@ MAINTAINER hugues@sutoiku.com
 
 WORKDIR /app
 RUN apk add --update py-pip curl bash && \
-	pip install cli53 && cd /usr/local/bin \
+	pip install cli53 && cd /usr/local/bin && \
 	curl -LO https://github.com/hmalphettes/nginx-proxy/releases/download/0.0.0/docker-gen && \
 	chmod +x docker-gen
 
