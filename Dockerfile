@@ -7,18 +7,14 @@
 ## Discover the expected DNS names following the same conventions than jwilder/nginx-proxy
 ## Generate the DNS A record file and call cli53 to process it
 
-FROM python:2-slim
+FROM alpine
 MAINTAINER hugues@sutoiku.com
 
-RUN pip install cli53
-
-RUN mkdir /app
 WORKDIR /app
-
-RUN apt-get update && apt-get install -y wget curl --no-install-recommends && rm -rf /var/lib/apt/lists/* && \
-	wget https://github.com/jwilder/docker-gen/releases/download/0.4.0/docker-gen-linux-amd64-0.4.0.tar.gz && \
-	tar xvzf docker-gen-linux-amd64-0.4.0.tar.gz -C /usr/local/bin && \
-	rm docker-gen-linux-amd64-0.4.0.tar.gz
+RUN apk add --update python-dev wget curl && \
+	pip install cli53 && \
+	wget -P /usr/local/bin https://github.com/hmalphettes/nginx-proxy/releases/download/0.0.0/docker-gen && \
+	chmod +x /usr/local/bin/docker-gen
 
 ADD cli53routes.tmpl /app/cli53routes.tmpl
 
