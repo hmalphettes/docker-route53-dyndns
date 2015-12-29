@@ -6,8 +6,8 @@
 {{ range $host, $containers := groupByMulti $ "Env.VIRTUAL_HOST" "," }}
 host={{ $host }}
 topzone=$(echo "${host##*.}")
-tenant=$(echo $host | cut -f1 -d'.')
-zone=$(echo "${host#*.}")
+tenant=$(echo "${host%.*.*}")
+zone=$(echo "${host#$tenant.})
 if [ "${PRIVATE_TOP_ZONES#*$topzone}" != "$PRIVATE_TOP_ZONES" -o "$tenant" = "$zone" ]; then
 	echo "Skipping private hostname $host" >> /var/log/route53-dyndns.log
 else
