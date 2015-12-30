@@ -11,8 +11,6 @@ zone=$(echo "${host#$tenant.}")
 if [ "${PRIVATE_TOP_ZONES#*$topzone}" != "$PRIVATE_TOP_ZONES" -o "$tenant" = "$zone" ]; then
 	echo "Skipping private hostname $host" >> /var/log/route53-dyndns.log
 else
-	tenant=$(echo $host | cut -f1 -d'.')
-	zone=$(echo "${host#*.}")
 	cmd="cli53 rrcreate $zone $tenant A $PUBLIC_IP --ttl 300 --replace"
 	if [ -z "$DRY_ROUTE53" ]; then
 		echo "$cmd" >> /var/log/route53-dyndns.log
