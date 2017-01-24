@@ -3,11 +3,20 @@
 [ -z "$PUBLIC_IP" -o "not found" = "$PUBLIC_IP" ] && PUBLIC_IP=`curl -s icanhazip.com`
 [ -z "$PRIVATE_TOP_ZONES" ] && PRIVATE_TOP_ZONES="localhost local priv private"
 
+{{ range $zone, $containers := groupByMulti $ "Env.ZONE" "," }}
+zone={{ $zone }}
+{{ end }}
+
 {{ range $host, $containers := groupByMulti $ "Env.VIRTUAL_HOST" "," }}
 host={{ $host }}
 topzone=$(echo "${host##*.}")
-tenant=$(echo "${host%.*.*}")
-zone=$(echo "${host#$tenant.}")
+
+if [ -n "$zone" ]; then
+  tenant=$(echo "${host%.$zone}")
+else
+  tenant=$(echo "${host%.*.*}")
+  zone=$(echo "${host#$tenant.}")
+fi
 if [ "${PRIVATE_TOP_ZONES#*$topzone}" != "$PRIVATE_TOP_ZONES" -o "$tenant" = "$zone" ]; then
 	echo "Skipping private hostname $host" >> /var/log/route53-dyndns.log
 else

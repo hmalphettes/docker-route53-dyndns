@@ -29,6 +29,11 @@ When AWS EC2 metadata service is not present; call icanhazip.com.
 When `PRIVATE_TOP_ZONES` is not defined its default value is: `localhost local priv private`
 When the VIRTUAL_HOST matches such a domain or hostname it is not published on route53.
 
+The zone is assumed to be of the form yyy.zzz (e.g. example.com). If you use
+subdomains you can supply a ZONE environmental variable to specify the
+appropriate value. For instance, if you want to create foo.at.example.com,
+specify a ZONE of at.example.com.
+
 Example run
 ===========
 ```
@@ -58,6 +63,11 @@ web00:
   image: progrium/webapp
   environment:
     VIRTUAL_HOST: localhost,dev01.foo.bar
+web01:
+  image: progrium/webapp2
+  environment:
+    VIRTUAL_HOST: localhost,dev01.a.foo.bar
+    ZONE: a.foo.bar
 ```
 
 Example generated script:
