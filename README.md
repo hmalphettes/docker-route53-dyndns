@@ -26,8 +26,14 @@ Environment variables:
 When `PUBLIC_IP` is not defined, call AWS's EC2 metadataservice to get it.
 When AWS EC2 metadata service is not present; call icanhazip.com.
 
-When `PRIVATE_TOP_ZONES` is not defined its default value is: `localhost local priv private`
-When the VIRTUAL_HOST matches such a domain or hostname it is not published on route53.
+When `PRIVATE_TOP_ZONES` is not defined it defaults to: `localhost local priv private`
+When the `VIRTUAL_HOST` matches such a domain or hostname it is not published on route53.
+
+When `ZONE` is not defined it defaults to the domain of `VIRTUAL_HOST`.
+To use `VIRTUAL_HOST` on subdomains, set the `ZONE`. For example:
+
+    `VIRTUAL_HOST=foo.at.example.com` and `ZONE=at.example.com`
+    `VIRTUAL_HOST=foo.example.com` (`ZONE` defaults to example.com)
 
 Example run
 ===========
@@ -58,6 +64,11 @@ web00:
   image: progrium/webapp
   environment:
     VIRTUAL_HOST: localhost,dev01.foo.bar
+web01:
+  image: progrium/webapp2
+  environment:
+    VIRTUAL_HOST: localhost,dev01.a.foo.bar
+    ZONE: a.foo.bar
 ```
 
 Example generated script:
