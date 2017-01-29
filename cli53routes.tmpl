@@ -1,6 +1,8 @@
 #!/bin/bash
 [ -z "$PUBLIC_IP" ] && PUBLIC_IP=`curl -s http://169.254.169.254/latest/meta-data/public-ipv4`
-[ -z "$PUBLIC_IP" -o "not found" = "$PUBLIC_IP" ] && PUBLIC_IP=`curl -s icanhazip.com`
+[ -z "$PUBLIC_IPV6" ] && PUBLIC_IPV6=`curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$(curl http://169.254.169.254/latest/meta-data/mac)/ipv6s`
+[ -z "$PUBLIC_IP" -o "not found" = "$PUBLIC_IP" ] && PUBLIC_IP=`curl --connect-timeout 3 -s ipv4.icanhazip.com`
+[ -z "$PUBLIC_IPV6" -o "not found" = "$PUBLIC_IPV6" ] && PUBLIC_IPV6=`curl --connect-timeout 3 -s ipv6.icanhazip.com`
 [ -z "$PRIVATE_TOP_ZONES" ] && PRIVATE_TOP_ZONES="localhost local priv private"
 
 {{ range $zone, $containers := groupByMulti $ "Env.ZONE" "," }}
@@ -20,10 +22,18 @@ fi
 if [ "${PRIVATE_TOP_ZONES#*$topzone}" != "$PRIVATE_TOP_ZONES" -o "$tenant" = "$zone" ]; then
 	echo "Skipping private hostname $host" >> /var/log/route53-dyndns.log
 else
-	cmd="cli53 rrcreate $zone $tenant A $PUBLIC_IP --ttl 300 --replace"
+        cmd=""
+        for IP in $PUBLIC_IP
+        do
+	        cmd="$cmd cli53 rrcreate $zone $tenant A $IP --ttl 300 --replace;"
+        done
+        for IPV6 in $PUBLIC_IPV6
+        do
+                cmd="$cmd cli53 rrcreate $zone $tenant AAAA $IPV6 --ttl 300 --replace;"
+        done
 	if [ -z "$DRY_ROUTE53" ]; then
 		echo "$cmd" >> /var/log/route53-dyndns.log
-		$cmd >> /var/log/route53-dyndns.log 2>&1
+		eval "$cmd" >> /var/log/route53-dyndns.log 2>&1
 	else
 		echo "DRYRUN: $cmd"
 	fi
